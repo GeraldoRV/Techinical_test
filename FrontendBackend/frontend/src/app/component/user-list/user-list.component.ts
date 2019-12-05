@@ -1,4 +1,4 @@
-import {Component, Directive, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 
 interface User {
   id: number;
@@ -65,11 +65,30 @@ export class NgbdSortableHeader {
 })
 export class UserListComponent implements OnInit {
   users = USERS;
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
   constructor() {
   }
 
   ngOnInit() {
+  }
+
+  onSort({column, direction}: SortEvent) {
+    this.headers.forEach(header => {
+      if (header.sortable !== column) {
+        header.direction = '';
+      }
+    });
+
+    if (direction === '') {
+      this.users = USERS;
+    } else {
+      this.users = [...USERS].sort((a, b) => {
+        const res = compare(a[column], b[column]);
+        return direction === 'asc' ? res : -res;
+      });
+    }
+
   }
 
 }

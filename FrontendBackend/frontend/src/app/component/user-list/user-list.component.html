@@ -1,12 +1,12 @@
 <h2>User list</h2>
 <table class="table">
   <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Roles</th>
+    <th class="sortable" sortable="id" (sort)="onSort($event)">ID</th>
+    <th class="sortable" sortable="name" (sort)="onSort($event)">Name</th>
+    <th sortable="roles">Roles</th>
   </tr>
   <tr *ngFor="let user of users">
-    <th>{{user.id}}</th>
+    <th sortable="id" (sort)="onSort($event)">{{user.id}}</th>
     <td>{{user.name}}</td>
     <td>
       <div ngbDropdown class="d-inline-block">
