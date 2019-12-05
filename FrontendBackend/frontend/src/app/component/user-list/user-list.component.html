@@ -1,0 +1,21 @@
+<h2>User list</h2>
+<table class="table">
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Roles</th>
+  </tr>
+  <tr *ngFor="let user of users">
+    <th>{{user.id}}</th>
+    <td>{{user.name}}</td>
+    <td>
+      <div ngbDropdown class="d-inline-block">
+      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Roles</button>
+      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+        <button ngbDropdownItem *ngFor="let role of user.roles">{{role}}</button>
+
+      </div>
+    </div></td>
+  </tr>
+
+</table>
