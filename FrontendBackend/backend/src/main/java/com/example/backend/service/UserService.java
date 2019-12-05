@@ -6,6 +6,7 @@ import com.example.backend.dto.UserDTO;
 import com.example.backend.model.Role;
 import com.example.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -22,15 +23,6 @@ public class UserService {
         return convertUsersToDTO(users);
     }
 
-    private List<UserDTO> convertUsersToDTO(List<User> users) {
-        ArrayList<UserDTO> usersDTO = new ArrayList<>();
-        for (User user :
-                users) {
-            usersDTO.add(convertToDTO(user));
-        }
-        return usersDTO;
-    }
-
     public UserDTO getUser(Integer id) {
         Optional<User> userFound = userDAO.findById(id);
         if (userFound.isPresent()) {
@@ -38,6 +30,23 @@ public class UserService {
             return convertToDTO(user);
         }
         return null;
+    }
+
+    public void createUser(UserDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.getName());
+        List<String> roles = userDTO.getRoles();
+        addRoles(user,roles);
+        userDAO.save(user);
+    }
+
+    private List<UserDTO> convertUsersToDTO(List<User> users) {
+        ArrayList<UserDTO> usersDTO = new ArrayList<>();
+        for (User user :
+                users) {
+            usersDTO.add(convertToDTO(user));
+        }
+        return usersDTO;
     }
 
     private UserDTO convertToDTO(User user) {
@@ -49,14 +58,6 @@ public class UserService {
             userDTO.addRole(role.getName());
         }
         return userDTO;
-    }
-
-    public void createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.getName());
-        List<String> roles = userDTO.getRoles();
-        addRoles(user,roles);
-        userDAO.save(user);
     }
 
     private void addRoles(User user, List<String> roles) {

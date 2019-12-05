@@ -26,9 +26,11 @@ CREATE TABLE tm_user_roles (
 INSERT INTO tm_role VALUES (1,'standard');
 INSERT INTO tm_role VALUES (2,'admin');
 
-INSERT INTO tm_user VALUES (1,'User 1', 'pass');
+INSERT INTO tm_user VALUES (1,'User 1', '$2a$10$V1O0ZJt7Ekcu1GdVUg5oEu0nbfm4xMOOuWrHmyPwmbvWx0OmGsf0i');
+INSERT INTO tm_user VALUES (2,'User 2', '$2a$10$V1O0ZJt7Ekcu1GdVUg5oEu0nbfm4xMOOuWrHmyPwmbvWx0OmGsf0i');
 
 INSERT INTO tm_user_roles VALUES (1,1);
+INSERT INTO tm_user_roles VALUES (2,1);
 INSERT INTO tm_user_roles VALUES (1,2);
 
 COMMIT ;
