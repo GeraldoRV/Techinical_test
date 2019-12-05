@@ -1,4 +1,13 @@
 <h2>User list</h2>
+<form [formGroup]="addUserForm" class="form-inline" (ngSubmit)="onSubmit()">
+  <input formControlName="name" type="text" placeholder="name">
+  <div class="form-check form-check-inline" formArrayName="roles" *ngFor="let role of addUserForm.controls.roles.controls; let i = index">
+    <input class="form-check-input" type="checkbox" [formControlName]="i"><label class="form-check-label">
+    {{roles[i]}}
+  </label>
+  </div>
+  <button type="submit">Add</button>
+</form>
 <table class="table">
   <tr>
     <th class="sortable" sortable="id" (sort)="onSort($event)">ID</th>
@@ -10,12 +19,13 @@
     <td>{{user.name}}</td>
     <td>
       <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Roles</button>
-      <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-        <button ngbDropdownItem *ngFor="let role of user.roles">{{role}}</button>
+        <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Roles</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button ngbDropdownItem *ngFor="let role of user.roles">{{role}}</button>
 
+        </div>
       </div>
-    </div></td>
+    </td>
   </tr>
 
 </table>

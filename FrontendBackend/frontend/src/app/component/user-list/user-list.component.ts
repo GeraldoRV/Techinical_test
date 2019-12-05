@@ -1,4 +1,5 @@
 import {Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 interface User {
   id: number;
@@ -66,12 +67,30 @@ export class NgbdSortableHeader {
 export class UserListComponent implements OnInit {
   users = USERS;
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
+  addUserForm: FormGroup;
+  roles: string[];
 
-  constructor() {
+  constructor(private fb: FormBuilder) {
+  }
+
+  private static getRoles() {
+    return ['standard', 'admin'];
   }
 
   ngOnInit() {
+    this.roles = UserListComponent.getRoles();
+    const array = this.roles.map(() => {
+      return new FormControl(false);
+    });
+    this.addUserForm = this.fb.group(
+      {
+        name: [''],
+        roles: new FormArray(array),
+
+      }
+    );
   }
+
 
   onSort({column, direction}: SortEvent) {
     this.headers.forEach(header => {
@@ -89,6 +108,16 @@ export class UserListComponent implements OnInit {
       });
     }
 
+  }
+
+  onSubmit() {
+    const value = this.addUserForm.controls.name.value;
+    const last = USERS[USERS.length - 1];
+    const roles = this.addUserForm.value.roles
+      .map((v, i) => v ? this.roles[i] : null)
+      .filter(v => v !== null);
+    USERS.push({id: last.id + 1, name: value, roles: roles});
+    this.addUserForm.reset();
   }
 
 }
