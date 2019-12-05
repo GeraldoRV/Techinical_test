@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dao.RoleDAO;
 import com.example.backend.dao.UserDAO;
 import com.example.backend.dto.UserDTO;
 import com.example.backend.model.Role;
@@ -7,14 +8,14 @@ import com.example.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
     @Autowired
     private UserDAO userDAO;
+    @Autowired
+    private RoleDAO roleDAO;
 
     public List<UserDTO> getAll() {
         List<User> users = (List<User>) userDAO.findAll();
@@ -50,13 +51,28 @@ public class UserService {
         return userDTO;
     }
 
-    public void createUser(User user) {
-        List<Role> roles = user.getRoles();
-        if (roles.isEmpty()){
+    public void createUser(UserDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.getName());
+        List<String> roles = userDTO.getRoles();
+        addRoles(user,roles);
+        userDAO.save(user);
+    }
+
+    private void addRoles(User user, List<String> roles) {
+        if (roles.isEmpty()) {
             Role role = new Role();
             role.setId(1);
-            roles.add(role);
+            Set<Role> rolesSet = new HashSet<>();
+            rolesSet.add(role);
+            user.setRoles(rolesSet);
+        } else {
+            Set<Role> userRoles = user.getRoles();
+            for (String role :
+                    roles) {
+                Role roleInDB = roleDAO.findByName(role);
+                userRoles.add(roleInDB);
+            }
         }
-        userDAO.save(user);
     }
 }
