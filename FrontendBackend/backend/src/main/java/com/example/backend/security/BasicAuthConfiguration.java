@@ -1,5 +1,5 @@
 package com.example.backend.security;
-
+/*
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -11,12 +11,12 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;*/
 
-@Configuration
-@EnableWebSecurity
-public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
-    @Autowired
+//@Configuration
+//@EnableWebSecurity
+public class BasicAuthConfiguration/* extends WebSecurityConfigurerAdapter */{
+  /*  @Autowired
     @Qualifier("userDetailsService")
     UserDetailsService userDetailsService;
 
@@ -26,7 +26,7 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Bean
+   // @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -41,5 +41,5 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
 
-    }
+    }*/
 }

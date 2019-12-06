@@ -95,14 +95,21 @@ export class UserListComponent implements OnInit {
     user.roles = this.addUserForm.value.roles
       .map((v, i) => v ? this.roles[i] : null)
       .filter(v => v !== null);
-    this._userService.createUser(user);
-    this.getUsers();
+    this._userService.createUser(user).subscribe(result => {
+      this.usersNotSort.push(result);
+    }, error => {
+      console.log(error);
+    });
     this.addUserForm.reset();
   }
 
   private getUsers() {
-    this.users = this._userService.getAll();
-    this.usersNotSort = this._userService.getAll();
+    this._userService.getAll().subscribe(result => {
+      this.users = result;
+      this.usersNotSort = this.users;
+    }, error => {
+      console.log(error);
+    });
   }
 
   hasRole(admin: string) {

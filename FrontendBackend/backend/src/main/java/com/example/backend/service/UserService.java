@@ -6,7 +6,6 @@ import com.example.backend.dto.UserDTO;
 import com.example.backend.model.Role;
 import com.example.backend.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -32,12 +31,14 @@ public class UserService {
         return null;
     }
 
-    public void createUser(UserDTO userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
         User user = new User();
         user.setName(userDTO.getName());
+        user.setPassword(userDTO.getName());
         List<String> roles = userDTO.getRoles();
-        addRoles(user,roles);
-        userDAO.save(user);
+        addRoles(user, roles);
+        User userSave = userDAO.save(user);
+        return convertToDTO(userSave);
     }
 
     private List<UserDTO> convertUsersToDTO(List<User> users) {
@@ -61,14 +62,11 @@ public class UserService {
     }
 
     private void addRoles(User user, List<String> roles) {
+        Set<Role> userRoles = user.getRoles();
         if (roles.isEmpty()) {
-            Role role = new Role();
-            role.setId(1);
-            Set<Role> rolesSet = new HashSet<>();
-            rolesSet.add(role);
-            user.setRoles(rolesSet);
+            Role roleInDB = roleDAO.findByName("standard");
+            userRoles.add(roleInDB);
         } else {
-            Set<Role> userRoles = user.getRoles();
             for (String role :
                     roles) {
                 Role roleInDB = roleDAO.findByName(role);

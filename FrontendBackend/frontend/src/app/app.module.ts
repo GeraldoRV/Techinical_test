@@ -10,6 +10,7 @@ import {UserMemory} from './memory/user-memory';
 import {LoginComponent} from './component/login/login.component';
 import {AuthGuard} from './service/authentication/auth.guard';
 import { NavbarComponent } from './component/navbar/navbar.component';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: '', component: LoginComponent},
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
     BrowserModule,
     NgbModule,
     FormsModule,
+    HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],

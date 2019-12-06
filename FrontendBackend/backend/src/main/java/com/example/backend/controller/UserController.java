@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
+@CrossOrigin("*")
 public class UserController {
     @Autowired
     private UserService userService;
@@ -25,7 +26,7 @@ public class UserController {
     }
 
     @PostMapping
-    public void createUser(@RequestBody UserDTO user) {
-        userService.createUser(user);
+    public UserDTO createUser(@RequestBody UserDTO user) {
+        return userService.createUser(user);
     }
 }
