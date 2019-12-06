@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("user")
-@CrossOrigin("*")
+@CrossOrigin
 public class UserController {
     @Autowired
     private UserService userService;

@@ -1,5 +1,5 @@
 package com.example.backend.service;
-/*
+
 
 import com.example.backend.dao.UserDAO;
 import com.example.backend.model.Role;
@@ -17,11 +17,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-*/
 
-//@Service("userDetailsService")
-public class MyUserDetailsService /*implements UserDetailsService*/ {
-   /* @Autowired
+@Service("userDetailsService")
+public class MyUserDetailsService implements UserDetailsService {
+    @Autowired
     private UserDAO userDAO;
 
     @Transactional(readOnly = true)
@@ -43,5 +42,5 @@ public class MyUserDetailsService /*implements UserDetailsService*/ {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         }
         return new ArrayList<>(authorities);
-    }*/
+    }
 }
