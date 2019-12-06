@@ -19,4 +19,13 @@ export class LoginService {
     this.user = user;
 
   }
+
+  hasRole(role: string) {
+    const roleFound = this.user.roles.find(roleName => roleName === role);
+    return roleFound !== undefined;
+  }
+
+  isLoginIn() {
+    return this.user !== undefined;
+  }
 }

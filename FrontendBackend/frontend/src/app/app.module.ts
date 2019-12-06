@@ -8,10 +8,14 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UserMemory} from './memory/user-memory';
 import {LoginComponent} from './component/login/login.component';
+import {AuthGuard} from './service/authentication/auth.guard';
 
 const appRoutes: Routes = [
   {path: '', component: LoginComponent},
-  {path: 'users', component: UserListComponent}
+  {
+    path: 'users', component: UserListComponent,
+    canActivate: [AuthGuard]
+  }
 ];
 
 @NgModule({

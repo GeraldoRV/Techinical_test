@@ -2,6 +2,7 @@ import {Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, Vi
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {UserService} from '../../service/user.service';
 import {User} from '../../model/user';
+import {LoginService} from '../../service/login.service';
 
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: { [key: string]: SortDirection } = {'asc': 'desc', 'desc': '', '': 'asc'};
@@ -47,7 +48,7 @@ export class UserListComponent implements OnInit {
   roles: string[];
   private usersNotSort: User[];
 
-  constructor(private fb: FormBuilder, private _userService: UserService) {
+  constructor(private fb: FormBuilder, private _userService: UserService, private _loginService: LoginService) {
   }
 
   private static getRoles() {
@@ -104,4 +105,7 @@ export class UserListComponent implements OnInit {
     this.usersNotSort = this._userService.getAll();
   }
 
+  hasRole(admin: string) {
+    return this._loginService.hasRole(admin);
+  }
 }

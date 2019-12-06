@@ -1,5 +1,5 @@
 <h2>User list</h2>
-<form [formGroup]="addUserForm" class="form-inline" (ngSubmit)="onSubmit()">
+<form *ngIf="hasRole('admin')" [formGroup]="addUserForm" class="form-inline" (ngSubmit)="onSubmit()">
   <input formControlName="name" type="text" placeholder="name">
   <div class="form-check form-check-inline" formArrayName="roles" *ngFor="let role of addUserForm.controls.roles.controls; let i = index">
     <input class="form-check-input" type="checkbox" [formControlName]="i"><label class="form-check-label">
