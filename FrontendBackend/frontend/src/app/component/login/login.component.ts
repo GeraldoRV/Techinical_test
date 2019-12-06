@@ -28,14 +28,18 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     const name = this.loginForm.controls.name.value;
     const password = this.loginForm.controls.password.value;
-    const user = this._loginService.login(name, password);
-    if (user !== undefined) {
-      this._loginService.setUserLogin(user);
-      this._router.navigate(['/users']).then();
+    this._loginService.login(name, password).subscribe(user => {
+      if (user !== undefined) {
+        this._loginService.setUserLogin(user);
+        this._router.navigate(['/users']).then();
 
-    } else {
+      } else {
+        alert('Not found');
+      }
+    }, error => {
       alert('Not found');
-    }
+      console.log(error);
+    });
 
   }
 }

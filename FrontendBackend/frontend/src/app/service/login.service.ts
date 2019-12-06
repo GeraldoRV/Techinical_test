@@ -1,18 +1,24 @@
 import {Injectable} from '@angular/core';
 import {UserMemory} from '../memory/user-memory';
 import {User} from '../model/user';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
   private user: User;
+  private base_url = 'http://localhost:8080/login';
 
-  constructor(private _userMemory: UserMemory) {
+
+  constructor(private _userMemory: UserMemory, private _http: HttpClient) {
   }
 
   login(name, password) {
-    return this._userMemory.login(name, password);
+    let params = new HttpParams();
+    params = params.append('name', name);
+    const headers = new HttpHeaders({Authorization: 'Basic ' + btoa(name + ':' + password)});
+    return this._http.get<User>(this.base_url, {headers: headers, params: params});
   }
 
   setUserLogin(user: User) {

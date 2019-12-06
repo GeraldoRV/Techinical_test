@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {UserMemory} from '../memory/user-memory';
 import {User} from '../model/user';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +13,7 @@ export class UserService {
   }
 
   getAll() {
-    const headers = new HttpHeaders({Authorization: 'Basic ' + btoa('User 1:admin')});
-    return this._http.get<User[]>(this.base_url, {headers: headers});
+    return this._http.get<User[]>(this.base_url);
   }
 
   createUser(user: User) {
