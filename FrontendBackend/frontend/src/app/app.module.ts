@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {UserMemory} from './memory/user-memory';
 import {LoginComponent} from './component/login/login.component';
 import {AuthGuard} from './service/authentication/auth.guard';
+import { NavbarComponent } from './component/navbar/navbar.component';
 
 const appRoutes: Routes = [
   {path: '', component: LoginComponent},
@@ -23,7 +24,8 @@ const appRoutes: Routes = [
     AppComponent,
     NgbdSortableHeader,
     UserListComponent,
-    LoginComponent
+    LoginComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

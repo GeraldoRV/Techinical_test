@@ -28,4 +28,8 @@ export class LoginService {
   isLoginIn() {
     return this.user !== undefined;
   }
+
+  logout() {
+    this.user = undefined;
+  }
 }
