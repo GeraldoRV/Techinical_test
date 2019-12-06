@@ -1,31 +1,7 @@
 import {Component, Directive, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren} from '@angular/core';
 import {FormArray, FormBuilder, FormControl, FormGroup} from '@angular/forms';
-
-interface User {
-  id: number;
-  name: string;
-  roles: string[];
-}
-
-const USERS: User[] = [
-  {
-    id: 1,
-    name: 'Felipe',
-    roles: ['standard', 'admin']
-  }, {
-    id: 2,
-    name: 'Roberto',
-    roles: ['standard']
-  }, {
-    id: 3,
-    name: 'Maria',
-    roles: ['standard']
-  }, {
-    id: 4,
-    name: 'Rebeca',
-    roles: ['standard']
-  }
-];
+import {UserService} from '../../service/user.service';
+import {User} from '../../model/user';
 
 export type SortDirection = 'asc' | 'desc' | '';
 const rotate: { [key: string]: SortDirection } = {'asc': 'desc', 'desc': '', '': 'asc'};
@@ -65,12 +41,13 @@ export class NgbdSortableHeader {
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  users = USERS;
+  users: User[];
   @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
   addUserForm: FormGroup;
   roles: string[];
+  private usersNotSort: User[];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private _userService: UserService) {
   }
 
   private static getRoles() {
@@ -78,6 +55,7 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getUsers();
     this.roles = UserListComponent.getRoles();
     const array = this.roles.map(() => {
       return new FormControl(false);
@@ -100,9 +78,9 @@ export class UserListComponent implements OnInit {
     });
 
     if (direction === '') {
-      this.users = USERS;
+      this.users = this.usersNotSort;
     } else {
-      this.users = [...USERS].sort((a, b) => {
+      this.users = [...this.usersNotSort].sort((a, b) => {
         const res = compare(a[column], b[column]);
         return direction === 'asc' ? res : -res;
       });
@@ -111,13 +89,19 @@ export class UserListComponent implements OnInit {
   }
 
   onSubmit() {
-    const value = this.addUserForm.controls.name.value;
-    const last = USERS[USERS.length - 1];
-    const roles = this.addUserForm.value.roles
+    const user = new User();
+    user.name = this.addUserForm.controls.name.value;
+    user.roles = this.addUserForm.value.roles
       .map((v, i) => v ? this.roles[i] : null)
       .filter(v => v !== null);
-    USERS.push({id: last.id + 1, name: value, roles: roles});
+    this._userService.createUser(user);
+    this.getUsers();
     this.addUserForm.reset();
+  }
+
+  private getUsers() {
+    this.users = this._userService.getAll();
+    this.usersNotSort = this._userService.getAll();
   }
 
 }

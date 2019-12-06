@@ -6,16 +6,20 @@ import {NgbdSortableHeader, UserListComponent} from './component/user-list/user-
 import {RouterModule, Routes} from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {UserMemory} from './memory/user-memory';
+import {LoginComponent} from './component/login/login.component';
 
 const appRoutes: Routes = [
-  {path: '', component: UserListComponent}
+  {path: '', component: LoginComponent},
+  {path: 'users', component: UserListComponent}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     NgbdSortableHeader,
-    UserListComponent
+    UserListComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [UserMemory],
   bootstrap: [AppComponent]
 })
 export class AppModule {
