@@ -1,0 +1,52 @@
+<div class="container">
+  <div [ngClass]="{'row': hasRole('admin')}">
+    <div *ngIf="hasRole('admin')" class="col-3">
+      <h2>Add New User</h2>
+      <form  [formGroup]="addUserForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="name-user-add">Name:</label>
+          <input id="name-user-add" class="form-control" formControlName="name" type="text" placeholder="Name...">
+        </div>
+        <div class="form-group">
+          <label>Roles:</label>
+          <div class="form-check" formArrayName="roles"
+               *ngFor="let role of addUserForm.controls.roles.controls; let i = index">
+            <input id="check({{i}})" class="form-check-input" type="checkbox" [formControlName]="i">
+            <label for="check({{i}})" class="form-check-label">
+              {{roles[i]}}
+            </label>
+          </div>
+        </div>
+        <button class="btn btn-outline-success" type="submit">Add</button>
+      </form>
+
+    </div>
+    <div [ngClass]="{'col-9': hasRole('admin')}">
+      <h2>User list</h2>
+
+      <table class="table">
+        <tr>
+          <th class="sortable" sortable="id" (sort)="onSort($event)">ID</th>
+          <th class="sortable" sortable="name" (sort)="onSort($event)">Name</th>
+          <th sortable="roles">Roles</th>
+        </tr>
+        <tr *ngFor="let user of users">
+          <th sortable="id" (sort)="onSort($event)">{{user.id}}</th>
+          <td>{{user.name}}</td>
+          <td>
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Roles</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <ul class="list-group">
+                <li class="list-group-item"  *ngFor="let role of user.roles">{{role}}</li>
+                </ul>
+
+              </div>
+            </div>
+          </td>
+        </tr>
+
+      </table>
+    </div>
+  </div>
+</div>

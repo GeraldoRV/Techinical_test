@@ -1,0 +1,14 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" *ngIf="isLogin()">
+  <span class="navbar-brand">Frontend</span>
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav">
+        <li class="nav-item">
+          <a routerLink="/" class="nav-link">
+            Users
+          </a>
+        </li>
+
+    </ul>
+    <button id="logout-button" class="btn btn-success" (click)="logout()">Sign out</button>
+  </div>
+</nav>
