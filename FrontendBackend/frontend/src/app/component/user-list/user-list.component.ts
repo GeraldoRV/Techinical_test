@@ -65,7 +65,6 @@ export class UserListComponent implements OnInit {
       {
         name: [''],
         roles: new FormArray(array),
-
       }
     );
   }

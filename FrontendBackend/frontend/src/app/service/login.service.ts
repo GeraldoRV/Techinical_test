@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {UserMemory} from '../memory/user-memory';
 import {User} from '../model/user';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 
@@ -10,8 +9,7 @@ export class LoginService {
   private user: User;
   private base_url = 'http://localhost:8080/login';
 
-
-  constructor(private _userMemory: UserMemory, private _http: HttpClient) {
+  constructor(private _http: HttpClient) {
   }
 
   login(name, password) {

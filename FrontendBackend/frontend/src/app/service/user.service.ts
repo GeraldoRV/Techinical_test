@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {UserMemory} from '../memory/user-memory';
 import {User} from '../model/user';
 import {HttpClient} from '@angular/common/http';
 
@@ -9,7 +8,7 @@ import {HttpClient} from '@angular/common/http';
 export class UserService {
   base_url = 'http://localhost:8080/user';
 
-  constructor(private _userMemory: UserMemory, private _http: HttpClient) {
+  constructor( private _http: HttpClient) {
   }
 
   getAll() {

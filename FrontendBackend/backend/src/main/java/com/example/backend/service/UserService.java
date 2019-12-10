@@ -17,7 +17,8 @@ public class UserService {
     private UserDAO userDAO;
     @Autowired
     private RoleDAO roleDAO;
-    @Autowired private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<UserDTO> getAll() {
         List<User> users = (List<User>) userDAO.findAll();
@@ -34,13 +35,13 @@ public class UserService {
     }
 
     public UserDTO createUser(UserDTO userDTO) {
-        User user = new User();
-        user.setName(userDTO.getName());
-        user.setPassword(passwordEncoder.encode(userDTO.getName()));
-        List<String> roles = userDTO.getRoles();
-        addRoles(user, roles);
+        User user = givenUserDetails(userDTO);
         User userSave = userDAO.save(user);
         return convertToDTO(userSave);
+    }
+
+    public UserDTO loginUser(String name) {
+        return convertToDTO(userDAO.findByName(name));
     }
 
     private List<UserDTO> convertUsersToDTO(List<User> users) {
@@ -63,21 +64,36 @@ public class UserService {
         return userDTO;
     }
 
-    private void addRoles(User user, List<String> roles) {
+    private User givenUserDetails(UserDTO userDTO) {
+        User user = new User();
+        user.setName(userDTO.getName());
+        user.setPassword(passwordEncoder.encode(userDTO.getName()));
+        List<String> rolesToADD = userDTO.getRoles();
+        addRoles(user, rolesToADD);
+        return user;
+    }
+
+    private void addRoles(User user, List<String> rolesToADD) {
         Set<Role> userRoles = user.getRoles();
-        if (roles.isEmpty()) {
-            Role roleInDB = roleDAO.findByName("standard");
-            userRoles.add(roleInDB);
+        if (rolesToADD.isEmpty()) {
+            setDefaultRole(userRoles);
         } else {
-            for (String role :
-                    roles) {
-                Role roleInDB = roleDAO.findByName(role);
-                userRoles.add(roleInDB);
-            }
+            setRoles(userRoles, rolesToADD);
         }
     }
 
-    public UserDTO loginUser(String name) {
-        return convertToDTO(userDAO.findByName(name));
+    private void setDefaultRole(Set<Role> userRoles) {
+        Role roleInDB = roleDAO.findByName("standard");
+        userRoles.add(roleInDB);
+    }
+
+    private void setRoles(Set<Role> userRoles, List<String> rolesToADD) {
+        for (String role :
+                rolesToADD) {
+            Role roleInDB = roleDAO.findByName(role);
+            if (roleInDB != null) {
+                userRoles.add(roleInDB);
+            }
+        }
     }
 }

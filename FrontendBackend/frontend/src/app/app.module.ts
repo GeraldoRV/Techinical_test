@@ -6,7 +6,6 @@ import {NgbdSortableHeader, UserListComponent} from './component/user-list/user-
 import {RouterModule, Routes} from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {UserMemory} from './memory/user-memory';
 import {LoginComponent} from './component/login/login.component';
 import {AuthGuard} from './service/authentication/auth.guard';
 import {NavbarComponent} from './component/navbar/navbar.component';
@@ -49,7 +48,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [UserMemory, {
+  providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: XhrInterceptor,
     multi: true

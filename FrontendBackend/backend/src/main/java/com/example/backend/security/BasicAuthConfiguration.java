@@ -40,7 +40,7 @@ public class BasicAuthConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/user").hasAuthority("admin")
-                .antMatchers("/user**","/login").authenticated()
+                .antMatchers("/user**", "/login").authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
