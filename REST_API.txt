@@ -1,0 +1,115 @@
+﻿ORM and REST API test
+
+
+Environment:  JBoss/Tomcat as application server
+          Hibernate/JOOQ/QueryDSL/MyBatis/... for persistence management
+          JAX-RS/Spring/Play Framework/... to build the REST API
+
+ Requirements: 
+
+* We need to create two tables:
+    - TM_USER with two columns:
+        id : a primary key for the table
+        name : will store the name of each user
+		password: user password
+
+    - TM_ROLE
+        id : a primary key for the table
+        name : a role name
+
+     A user can have more than one role and of course a role can be shared between different users. 
+
+* You will need to create the entities to map this database structure.
+
+* You have to populate the database with two roles and one user with a relationship with both roles:
+ROLES:
+id=1
+name=standard
+
+id=2
+name=admin
+
+USER:
+id=1
+name=User 1
+roles=[standard, admin]
+
+
+* Only administrators can create new users, therefore admins need to be able to log-in (the login process must be performed in the backend side, this process should not be mocked)
+
+
+*  Once the entities have been created, we would like to expose the database information using a Restful web service returning the data in JSON. 
+* All loged in users can list users
+
+
+You have to expose as GET the following operations:
+    List all users
+    Get an specific user
+
+Response example:
+
+ [{
+     "id": ​1,
+     "name": "User 1",
+     "roles": [
+            "standard",
+        "admin"
+     ]
+ }]
+
+
+* You have to expose as POST the following operation:
+Create new user with default role set to "standard", in case the role wasn't specified
+
+For example, if you POST this data:
+{     
+     "name": "NEW USER "
+ }
+
+A new user will be created with the "standard" role
+
+However if it is like:
+{     
+     "name": "NEW USER ",
+	 "roles": ["admin"]
+}
+
+It should be created as defined
+
+
+Nice to have:
+- The database must be populated automatically on server start
+- The database should be an in-memory one like H2
+- If you know how to do it, tests are welcome
+- Use the cleanest and simplest code as possible
+- Do not use IDE tools as automatic DAO creations and mapping, show us what you can do!
+
+If you don't know how to do something, for example, if you don't know how to populate the data automatically when the server starts, then find your way to resolve the exercise, for example, create a page with a button which triggers the database initial load ....
+Your code should be packageable and deployed without any tweaks on any configuration, we would like to pick up the application, deploy it (if needed on the selected technology) and run without any additional changes or external configuration.
+
+- Write here in English a short description of how your code works. For example, suppose that you are going to explain to a Junior programmer this application, you have to explain how the database is populated, which bean is responsible for which tasks and so on.
+
+To build the API REST, I used Sring Boot, which facilities development with Spring framework. In the pom.xml file, the deseired dependencies are specified,
+that in this case are web(default tomcat application server), jpa(hibernate), security and h2 database. In src/main/resources, there is the schema.sql file. If the following line "spring.jpa.hibernate.ddl-auto = none" is placed in the application.propeties file,
+when the application start running, it is executes the sql found in the schema.sql file, creating the structure of the data and populating it.
+
+The main code is in the src/main/java directory and module com.example.backend that is divided into different modules with a specific task, that are controller, service, dao, model, dto and security.
+
+The controller package has the classes responsible for returning the information in JSON to an HTTP request, 
+in this case, there are only two, UserController and LoginController(this class was implemented to facilitate the log-in by the frontend). This package communicates with the service package. 
+
+The service package is reponsible for the logic of the different methods of the controller package. There are two classes, UserService(UserController and LoginController call this class) and MyUserDetailsService(that will be explained later).
+
+The dao package is reponsible for making queries and insertions in the database, the service package is the one that communicates with this package. The entities are in the model package.
+
+In the dto package, there is the stucture of the data that will be returned to the controller, for not return all the informartion of the entities, in this case is only the User entity. 
+
+The service package is reponsible to tranform the data of the database to dto, that is, User or List of User to UserDTO o List of UserDTO.
+
+Finally, the security package is reponsible for configuring the security of the different URL´s with Basic Authentication. To log-in a user, I use MyUserDetailsService class thatt implements UserDetailsService of the framework,
+that in a simple way, find the user in the database with the credentials (name and password, that is the same name)and makes the session in the app with her roles.
+There are two URL´s. To access it, just put them in the browser or use an app like PostMan to use the different HTTP methods:
+- GET http://localhost:8080/user : List all users.
+- GET http://localhost:8080/user/id : Get an specific user. (id = User's id)
+- POST http://localhost:8080/user with JSON data : Create a user. Only users with admin's role.
+- GET http://localhost:8080/login?name=username : Get an specific user. (username = User's name) This one is to facilitate the login process in the frontend.
